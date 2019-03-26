@@ -45,7 +45,7 @@ console.log(c);
 
 data = plot_data;
 var svgWidth = 480;
-var svgHeight = 960;
+var svgHeight = 720;
 var barPadding = 1;
 
 var svg = d3.select("body")
@@ -59,6 +59,9 @@ svg.selectAll("rect")
 	.data(plot_data.map(x => x.count))
 	.enter()
 	.append("rect")
+	.attr("fill", function(d) {
+		return "rgb(255, 0, " + d + ")";
+	})
 	.attr("width", function(d){return d;})
 	.attr("y", function(d, i) {
 		return i * (svgHeight/N + barPadding);
@@ -70,6 +73,7 @@ svg.selectAll("text")
 	.data(plot_data.map(x => x.word))
 	.enter()
 	.append("text")
+	.attr("font-size", "10px")
 	.text(function(d) {
 		return d + " (score: " + scores[d] + ")";
 	})
