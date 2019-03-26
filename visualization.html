@@ -10,10 +10,10 @@
 <script src="data.js"></script>
 
 <script>
-let stopwords = ["a", "for", "about", "above", "after", "again", "against", "all", "am", "an", "and", "any", "are", "aren't", "as", "at", "be", "because", "been", "before", "being", "below", "between", "both", "but", "by", "can't", "cannot", "could", "couldn't", "did", "didn't", "do", "does", "doesn't", "doing", "don't", "down", "during", "each", "few", "for", "from", "further", "had", "hadn't", "has", "hasn't", "have", "haven't", "having", "he", "he'd", "he'll", "he's", "her", "here", "here's", "hers", "herself", "him", "himself", "his", "how", "how's", "i", "i'd", "i'll", "i'm", "i've", "if", "in", "into", "is", "isn't", "it", "it's", "its", "itself", "let's", "me", "more", "most", "mustn't", "my", "myself", "no", "nor", "not", "of", "off", "on", "once", "only", "or", "other", "ought", "our", "ours", "ourselves", "out", "over", "own", "same", "shan't", "she", "she'd", "she'll", "she's", "should", "shouldn't", "so", "some", "such", "than", "that", "that's", "the", "their", "theirs", "them", "themselves", "then", "there", "there's", "these", "they", "they'd", "they'll", "they're", "they've", "this", "those", "through", "to", "too", "under", "until", "up", "very", "was", "wasn't", "we", "we'd", "we'll", "we're", "we've", "were", "weren't", "what", "what's", "when", "when's", "where", "where's", "which", "while", "who", "who's", "whom", "why", "why's", "with", "won't", "would", "wouldn't", "you", "you'd", "you'll", "you're", "you've", "your", "yours", "yourself", "yourselves"];
+let stopwords = ["about", "above", "after", "again", "against", "all", "and", "any", "are", "been", "being", "below", "between", "both", "but", "did", "does", "for", "from", "had", "has", "have", "into", "let", "more", "most", "not", "off", "once", "only", "other", "over", "some", "that", "the", "then", "there", "these", "they", "this", "those", "too", "under", "very", "what", "when", "where", "which", "while", "who", "whom", "why", "with", "would", "you"];
 
-N = 50;
-function compare(a,b) {
+var N = 50;
+function compare(a, b) {
   if (a.count > b.count)
     return -1;
   if (a.count < b.count)
@@ -21,31 +21,20 @@ function compare(a,b) {
   return 0;
 }
 
-word_arr = Object.keys(scores);
-console.log(word_arr);
+var word_arr = Object.keys(scores);
 let words = word_arr
 	.filter(function(x) { return !(stopwords.indexOf(x) >= 0); })
 	.filter(function(x) { return x.length > 2; });
-	<!-- .map(function(x) { return x.trim(); }) -->
-	<!-- .filter(function(x) { return !(!x); }) -->
 
-console.log(words);
 var data = [];
 for (let key of words) {
 	data.push({ "word": key, "count": scores[key] });
 }
 data.sort(compare);
-console.log(data);
-
 var plot_data = data.slice(0, N);
-var w = plot_data.map(x => x.word);
-var c = [...w.keys()];
-console.log(w);
-console.log(c);
 
-data = plot_data;
 var svgWidth = 480;
-var svgHeight = 720;
+var svgHeight = 750;
 var barPadding = 1;
 
 var svg = d3.select("body")
@@ -53,22 +42,22 @@ var svg = d3.select("body")
             .attr("width", svgWidth)
             .attr("height", svgHeight);
 
-var barWidth = svgWidth / data.length;
+var barWidth = Math.round(svgHeight / N) - barPadding;
 
 svg.selectAll("rect")
 	.data(plot_data.map(x => x.count))
 	.enter()
 	.append("rect")
 	.attr("fill", function(d) {
-		return "rgb(255, 0, " + d + ")";
+		var v = 255 - d;
+		return "rgb(255, 0, " + v + ")";
 	})
 	.attr("width", function(d){return d;})
 	.attr("y", function(d, i) {
-		return i * (svgHeight/N + barPadding);
+		return i * (barWidth + barPadding);
 	})
-	.attr("height", function(d) {
-		return svgHeight / N - barPadding;  //Just the data value
-	});
+	.attr("height", barWidth);
+
 svg.selectAll("text")
 	.data(plot_data.map(x => x.word))
 	.enter()
@@ -81,23 +70,10 @@ svg.selectAll("text")
 		return scores[d] + 5;
 	})
 	.attr("y", function(d, i) {
-		return i * (svgHeight/N + barPadding) + svgHeight / N / 2;
-	});
+		return i * (barWidth + barPadding) + barWidth / 2 + 1;
+	})
+	.attr("alignment-baseline", "middle");
 
-<!-- svg.selectAll("rect") -->
-	<!-- .data(plot_data.map(x => x.count)) -->
-	<!-- .enter() -->
-	<!-- .append("rect") -->
-	<!-- .attr("x", function(d, i) { -->
-		<!-- return i * (svgWidth / N); -->
-	<!-- }) -->
-	<!-- .attr("width", svgWidth / N - barPadding) -->
-	<!-- .attr("y", function(d) { -->
-		<!-- return svgHeight - d; -->
-	<!-- }) -->
-	<!-- .attr("height", function(d) { -->
-		<!-- return d;  //Just the data value -->
-	<!-- }); -->
 </script>
 </body>
 </html>
