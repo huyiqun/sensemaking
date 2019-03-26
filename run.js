@@ -1,4 +1,5 @@
 // var $ = require('jquery');
+const fs = require('fs');
 var mitcourses   = require('./mitcourses_small');
 var getTitles    = require('./getTitles');
 var getWords     = require('./getWords');
@@ -16,3 +17,6 @@ console.log(wordsFlat);
 
 var scores = getScores(wordsFlat);
 console.log(scores);
+
+var str = "var scores = " + JSON.stringify(scores) + ";";
+fs.writeFile('data.js', str, (err) => {})
