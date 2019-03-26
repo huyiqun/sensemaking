@@ -1,6 +1,6 @@
 // var $ = require('jquery');
 const fs = require('fs');
-var mitcourses   = require('./mitcourses_small');
+var mitcourses   = require('./mitcourses');
 var getTitles    = require('./getTitles');
 var getWords     = require('./getWords');
 var getWordsFlat = require('./getWordsFlat');
