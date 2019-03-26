@@ -11,8 +11,8 @@ console.log(titles);
 var words = getWords(titles);
 console.log(words);
 
-// var wordsFlat = getWordsFlat(words);
-// console.log(wordsFlat);
+var wordsFlat = getWordsFlat(words);
+console.log(wordsFlat);
 
 // var scores = getScores(wordsFlat);
 // console.log(scores);
